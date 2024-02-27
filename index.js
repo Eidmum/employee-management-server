@@ -30,12 +30,25 @@ const client = new MongoClient(uri, {
         const result=await employees.find({}).toArray();
         res.send(result);
       })
+
+      app.get('/employees/:id',async(req,res)=>{
+        const id=req.params.id;
+        const result=await employees.findOne({_id:new ObjectId(id)});
+        res.send(result);
+      })
+
       app.post("/employees",async(req,res)=>{
         const newEmployee=req.body;
         const result=await employees.insertOne(newEmployee);
         res.send(result);
       })
-
+      app.patch('/employees/:id',async(req,res)=>{
+        const id=req.params.id;
+        const data=req.body;
+        console.log(data);
+        const result=await employees.updateOne({_id:new ObjectId(id)},{$set:data});
+        res.send(result);
+      })
       app.delete('/employees/:id',async(req,res)=>{
         const id=req.params.id;
         console.log(id);
